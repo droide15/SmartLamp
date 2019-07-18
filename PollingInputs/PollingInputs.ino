@@ -40,7 +40,6 @@ void loop() {
       delay(1000);
       digitalWrite(led1, LOW);
       digitalWrite(led2, LOW);
-      delay(1000);
       state1 = 0;
       state2 = 0;
       displaying = false;
