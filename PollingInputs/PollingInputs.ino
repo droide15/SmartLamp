@@ -44,9 +44,15 @@ void loop() {
       state1 = 0;
       state2 = 0;
       displaying = false;
-  } else if (digitalRead(push1) == HIGH or digitalRead(push2 == HIGH)) {
-    elapsed = millis();
-    polling = true;
-  } else
-    delay(50);
+  } else {
+    if (digitalRead(push1) == HIGH)
+      state1 = 1;
+    if (digitalRead(push2) == HIGH)
+      state2 = 1;
+    if (state1 == 1 or state2 == 1) {
+      elapsed = millis();
+      polling = true;
+    } else
+      delay(50);
+  }
 }
