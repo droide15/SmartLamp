@@ -3,8 +3,8 @@ int led2 = 11;
 int push1 = 3;
 int push2 = 2;
 
-int state1 = 0;
-int state2 = 0;
+int state1 = false;
+int state2 = false;
 
 long elapsed = 0;
 bool polling = false;
@@ -23,35 +23,37 @@ void setup() {
 
 void loop() {
   if (polling) {
-    if (millis() - elapsed > 250) {
+    if (millis() - elapsed > 100) {
       polling = false;
       displaying = true;
-    } else {
-      if (digitalRead(push1) == HIGH)
-        state1 = 1;
-      if (digitalRead(push2) == HIGH)
-        state2 = 1;
-    }
+    } else
+      evalPush();
   } else if (displaying) {
-      if (state1 == 1)
+      if (state1)
         digitalWrite(led1, HIGH);
-      if (state2 == 1)
+      if (state2)
         digitalWrite(led2, HIGH);
-      delay(1000);
+      delay(500);
       digitalWrite(led1, LOW);
       digitalWrite(led2, LOW);
-      state1 = 0;
-      state2 = 0;
+      delay(50);
+      state1 = false;
+      state2 = false;
       displaying = false;
   } else {
-    if (digitalRead(push1) == HIGH)
-      state1 = 1;
-    if (digitalRead(push2) == HIGH)
-      state2 = 1;
-    if (state1 == 1 or state2 == 1) {
+    if (evalPush()) {
       elapsed = millis();
       polling = true;
     } else
-      delay(50);
+      delay(10);
   }
 }
+
+boolean evalPush() {
+  if (digitalRead(push1) == HIGH)
+    state1 = true;
+  if (digitalRead(push2) == HIGH)
+    state2 = true;
+  return state1 or state2;
+}
+
